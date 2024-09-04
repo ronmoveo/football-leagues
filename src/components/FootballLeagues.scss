@@ -8,25 +8,76 @@
     margin-bottom: 20px;
   }
 
-  .react-tabs {
-    &__tab-list {
-      display: flex;
-      justify-content: space-around;
-      border-bottom: 1px solid #ccc;
-      margin-bottom: 20px;
-    }
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
 
-    &__tab {
-      padding: 10px 20px;
-      cursor: pointer;
-      border: 1px solid transparent;
+  .initial-loader {
+    border: 16px solid #f3f3f3; 
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
 
-      &--selected {
-        background-color: #f0f0f0;
-        border-color: #ccc;
-        border-bottom: none;
-      }
+  .loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 20px;
+    font-size: 1.2rem;
+    color: #666;
+  }
+
+  .tab-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+    white-space: nowrap;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    display: inline-block;
+
+    &--selected {
+      background-color: #f0f0f0;
+      border-color: #ccc;
+      border-bottom: none;
     }
+  }
+
+  .react-tabs__tab--selected {
+    background-color: #f0f0f0;
+    border-color: #ccc;
+    border-bottom: none;
   }
 
   .teams-grid {
@@ -53,9 +104,8 @@
       height: 100px;
       object-fit: contain;
       margin-bottom: 10px;
-      background-color: #f0f0f0;
+      background-color: #f0f0f0; 
     }
-    
 
     h3 {
       text-align: center;
