@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import 'react-tabs/style/react-tabs.css';
 import './FootballLeagues.scss';
 
 interface Team {
@@ -22,32 +20,29 @@ const FootballLeagues: React.FC = () => {
   const [leagues, setLeagues] = useState<League[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
-  const [tabLoading, setTabLoading] = useState<number | null>(null); 
-  const [initialLoadDone, setInitialLoadDone] = useState(false); 
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [tabLoading, setTabLoading] = useState<number | null>(null);
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
 
   useEffect(() => {
     const fetchLeagues = async () => {
       setIsLoading(true);
 
-      // Check cache first
       const cachedData = localStorage.getItem(CACHE_KEY);
       if (cachedData) {
         setLeagues(JSON.parse(cachedData));
         setIsLoading(false);
-        setInitialLoadDone(true); // Initial load done from cache
+        setInitialLoadDone(true);
         return;
       }
 
       try {
-        const leaguesResponse = await axios.get(
-          'https://www.thesportsdb.com/api/v1/json/3/all_leagues.php'
-        );
+        const leaguesResponse = await axios.get('https://www.thesportsdb.com/api/v1/json/3/all_leagues.php');
         const allLeagues = leaguesResponse.data.leagues || [];
 
         const soccerLeagues = await Promise.all(
           allLeagues
-            .filter((league: any) => league.strSport === 'Soccer') // Filter for soccer leagues
+            .filter((league: any) => league.strSport === 'Soccer')
             .map(async (league: any) => {
               if (!league.strLeague) return null;
               const response = await axios.get(
@@ -64,13 +59,12 @@ const FootballLeagues: React.FC = () => {
         const validLeagues = soccerLeagues.filter((league) => league !== null) as League[];
         setLeagues(validLeagues);
 
-        // Cache the data
         localStorage.setItem(CACHE_KEY, JSON.stringify(validLeagues));
       } catch (error) {
         console.error('Error fetching leagues or teams:', error);
       } finally {
         setIsLoading(false);
-        setInitialLoadDone(true); // Initial load done
+        setInitialLoadDone(true);
       }
     };
 
@@ -78,11 +72,11 @@ const FootballLeagues: React.FC = () => {
   }, []);
 
   const handleSelectTab = (index: number) => {
-    setTabLoading(index); // Set loading for the selected tab
+    setTabLoading(index);
     setSelectedIndex(index);
     setTimeout(() => {
-      setTabLoading(null); // Reset loading after a short delay
-    }, 500); // Delay to simulate loading time
+      setTabLoading(null);
+    }, 500);
   };
 
   const filteredLeagues = leagues.filter((league) =>
@@ -106,17 +100,23 @@ const FootballLeagues: React.FC = () => {
           {filteredLeagues.length === 0 ? (
             <div className="empty-state">No leagues to display</div>
           ) : (
-            <Tabs selectedIndex={selectedIndex} onSelect={handleSelectTab}>
-              <TabList className="tab-list">
+            <>
+              <div className="tab-list">
                 {filteredLeagues.map((league, index) => (
-                  <Tab key={league.idLeague} className={`tab ${selectedIndex === index ? 'tab--selected' : ''}`}>
+                  <div
+                    key={league.idLeague}
+                    className={`tab ${selectedIndex === index ? 'tab--selected' : ''}`}
+                    onClick={() => handleSelectTab(index)}
+                  >
                     {league.strLeague}
-                  </Tab>
+                  </div>
                 ))}
-              </TabList>
-
+              </div>
               {filteredLeagues.map((league, index) => (
-                <TabPanel key={league.idLeague} className="tab-panel">
+                <div
+                  key={league.idLeague}
+                  className={`tab-panel ${selectedIndex === index ? 'tab-panel--active' : ''}`}
+                >
                   {tabLoading === index ? (
                     <div className="loader"></div>
                   ) : (
@@ -131,9 +131,9 @@ const FootballLeagues: React.FC = () => {
                       </div>
                     )
                   )}
-                </TabPanel>
+                </div>
               ))}
-            </Tabs>
+            </>
           )}
         </>
       )}
