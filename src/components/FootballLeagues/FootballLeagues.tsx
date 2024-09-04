@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { League } from '../../types';
+import HeaderSearchBar from '../HeaderSearchBar/HeaderSearchBar';
 import './FootballLeagues.scss';
-import { Team, League } from '../types'; 
 
 const CACHE_KEY = 'footballLeaguesCache';
 
@@ -9,9 +10,9 @@ const FootballLeagues: React.FC = () => {
   const [leagues, setLeagues] = useState<League[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [tabLoading, setTabLoading] = useState<number | null>(null);
-  const [initialLoadDone, setInitialLoadDone] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
+  const [tabLoading, setTabLoading] = useState<number | null>(null); 
+  const [initialLoadDone, setInitialLoadDone] = useState(false); 
 
   useEffect(() => {
     const fetchLeagues = async () => {
@@ -21,12 +22,14 @@ const FootballLeagues: React.FC = () => {
       if (cachedData) {
         setLeagues(JSON.parse(cachedData));
         setIsLoading(false);
-        setInitialLoadDone(true);
+        setInitialLoadDone(true); 
         return;
       }
 
       try {
-        const leaguesResponse = await axios.get('https://www.thesportsdb.com/api/v1/json/3/all_leagues.php');
+        const leaguesResponse = await axios.get(
+          'https://www.thesportsdb.com/api/v1/json/3/all_leagues.php'
+        );
         const allLeagues = leaguesResponse.data.leagues || [];
 
         const soccerLeagues = await Promise.all(
@@ -61,7 +64,7 @@ const FootballLeagues: React.FC = () => {
   }, []);
 
   const handleSelectTab = (index: number) => {
-    setTabLoading(index);
+    setTabLoading(index); 
     setSelectedIndex(index);
     setTimeout(() => {
       setTabLoading(null);
@@ -74,14 +77,8 @@ const FootballLeagues: React.FC = () => {
 
   return (
     <div className="football-leagues">
-      <h1>Football Leagues</h1>
-      <input
-        type="text"
-        placeholder="Search by league..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="search-input"
-      />
+      <HeaderSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+
       {isLoading && !initialLoadDone ? (
         <div className="initial-loader"></div>
       ) : (
@@ -89,7 +86,7 @@ const FootballLeagues: React.FC = () => {
           {filteredLeagues.length === 0 ? (
             <div className="empty-state">No leagues to display</div>
           ) : (
-            <>
+            <div className="tabs-container">
               <div className="tab-list">
                 {filteredLeagues.map((league, index) => (
                   <div
@@ -101,11 +98,9 @@ const FootballLeagues: React.FC = () => {
                   </div>
                 ))}
               </div>
+
               {filteredLeagues.map((league, index) => (
-                <div
-                  key={league.idLeague}
-                  className={`tab-panel ${selectedIndex === index ? 'tab-panel--active' : ''}`}
-                >
+                <div key={league.idLeague} className={`tab-panel ${selectedIndex === index ? 'tab-panel--selected' : ''}`}>
                   {tabLoading === index ? (
                     <div className="loader"></div>
                   ) : (
@@ -122,7 +117,7 @@ const FootballLeagues: React.FC = () => {
                   )}
                 </div>
               ))}
-            </>
+            </div>
           )}
         </>
       )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import FootballLeagues from './components/FootballLeagues';
+import FootballLeagues from './components/FootballLeagues/FootballLeagues';
 
 function App() {
   return (
