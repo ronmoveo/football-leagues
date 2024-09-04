@@ -1,18 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './FootballLeagues.scss';
-
-interface Team {
-  idTeam: string;
-  strTeam: string;
-  strBadge: string;
-}
-
-interface League {
-  idLeague: string;
-  strLeague: string;
-  teams: Team[];
-}
+import { Team, League } from '../types'; 
 
 const CACHE_KEY = 'footballLeaguesCache';
 
