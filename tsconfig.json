@@ -1,50 +1,29 @@
 {
   "compilerOptions": {
-    // Specify ECMAScript target version
     "target": "es5",
-    // List of library files to be included in the compilation
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
-    // Allow JavaScript files to be compiled
     "allowJs": true,
-    // Skip type checking of declaration files
     "skipLibCheck": true,
-    // Enables emit interoperability between CommonJS and ES Modules
     "esModuleInterop": true,
-    // Allow default imports from modules with no default export
     "allowSyntheticDefaultImports": true,
-    // Enable all strict type checking options
     "strict": true,
-    // Ensure consistent casing in file names
     "forceConsistentCasingInFileNames": true,
-    // Report errors on fallthrough cases in switch statements
     "noFallthroughCasesInSwitch": true,
-    // Specify module code generation
     "module": "esnext",
-    // Specify module resolution strategy
     "moduleResolution": "node",
-    // Allow importing JSON modules
     "resolveJsonModule": true,
-    // Ensure each file can be safely transpiled without relying on other imports
     "isolatedModules": true,
-    // Do not emit compiler output files like JavaScript source code
     "noEmit": false,
-    // Support JSX in .tsx files
     "jsx": "react-jsx",
-    // Generate corresponding .d.ts file
     "declaration": true,
-    // Generate sourcemaps for debug support
     "sourceMap": true,
-    // Specify output directory for compiled files
     "outDir": "./dist",
-    // Enable project compilation
     "composite": true,
-    // Include modules imported with .json extension
     "resolveJsonModule": true,
-    // Disallow inconsistently-cased references to the same file
     "forceConsistentCasingInFileNames": true
   },
   "include": [
