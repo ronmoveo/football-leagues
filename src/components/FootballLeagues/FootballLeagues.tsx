@@ -3,6 +3,8 @@ import axios from 'axios';
 import { League, Team } from '../../types';
 import HeaderSearchBar from '../HeaderSearchBar/HeaderSearchBar';
 import Tabs from '../Tabs/Tabs';
+import EmptyState from '../EmptyState/EmptyState';
+import Loader from '../Loader/Loader';
 import './FootballLeagues.scss';
 
 const CACHE_KEY = 'footballLeaguesCache';
@@ -37,7 +39,11 @@ const FootballLeagues: React.FC = () => {
       const leaguesResponse = await axios.get('https://www.thesportsdb.com/api/v1/json/3/all_leagues.php');
       const soccerLeagues: League[] = leaguesResponse.data.leagues
         .filter((league: any) => league.strSport === 'Soccer')
-        .map((league: any) => ({ idLeague: league.idLeague, strLeague: league.strLeague, teams: undefined }));
+        .map((league: any) => ({
+          idLeague: league.idLeague,
+          strLeague: league.strLeague,
+          teams: undefined,
+        }));
       setLeagues(soccerLeagues);
       localStorage.setItem(CACHE_KEY, JSON.stringify(soccerLeagues));
     } catch (error) {
@@ -50,14 +56,16 @@ const FootballLeagues: React.FC = () => {
   const fetchTeams = async (leagueName: string, leagueIndex: number) => {
     setIsLoadingTeams(true);
     try {
-      const response = await axios.get(`https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=${encodeURIComponent(leagueName)}`);
+      const response = await axios.get(
+        `https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=${encodeURIComponent(leagueName)}`
+      );
       const LeagueTeamsView: Team[] = response.data.teams.map((team: any) => ({
         idTeam: team.idTeam,
         strTeam: team.strTeam,
-        strTeamBadge: team.strTeamBadge
+        strTeamBadge: team.strTeamBadge,
       }));
 
-      setLeagues(prevLeagues => {
+      setLeagues((prevLeagues) => {
         const updatedLeagues = [...prevLeagues];
         updatedLeagues[leagueIndex] = { ...updatedLeagues[leagueIndex], teams: LeagueTeamsView };
         return updatedLeagues;
@@ -73,19 +81,14 @@ const FootballLeagues: React.FC = () => {
     league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const renderEmptyState = (message: string) => (
-    <div className="empty-state">
-      <p>{message}</p>
-    </div>
-  );
-
   const renderContent = () => {
     if (isLoading) {
-      return <div className="loader">Loading leagues...</div>;
+      return <Loader />;
     }
 
+    // Show EmptyState if no leagues match the search
     if (filteredLeagues.length === 0) {
-      return renderEmptyState("No leagues found matching your search. Please try a different term.");
+      return <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />;
     }
 
     return (
@@ -96,8 +99,9 @@ const FootballLeagues: React.FC = () => {
           setSelectedIndex={setSelectedIndex}
           isLoadingTeams={isLoadingTeams}
         />
-        {selectedIndex === undefined &&
-          renderEmptyState("Please select a league to view its details.")}
+        {selectedIndex === undefined && (
+          <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />
+        )}
       </>
     );
   };
