@@ -51,7 +51,7 @@ const FootballLeagues: React.FC = () => {
     setIsLoadingTeams(true);
     try {
       const response = await axios.get(`https://www.thesportsdb.com/api/v1/json/3/search_all_teams.php?l=${encodeURIComponent(leagueName)}`);
-      const teamsData: Team[] = response.data.teams.map((team: any) => ({
+      const LeagueTeamsView: Team[] = response.data.teams.map((team: any) => ({
         idTeam: team.idTeam,
         strTeam: team.strTeam,
         strTeamBadge: team.strTeamBadge
@@ -59,7 +59,7 @@ const FootballLeagues: React.FC = () => {
 
       setLeagues(prevLeagues => {
         const updatedLeagues = [...prevLeagues];
-        updatedLeagues[leagueIndex] = { ...updatedLeagues[leagueIndex], teams: teamsData };
+        updatedLeagues[leagueIndex] = { ...updatedLeagues[leagueIndex], teams: LeagueTeamsView };
         return updatedLeagues;
       });
     } catch (error) {

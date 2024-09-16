@@ -1,6 +1,6 @@
 import React from 'react';
 import { League } from '../../types';
-import TeamsData from '../TeamsData/TeamsData';
+import LeagueTeamsView from '../LeagueTeamsView/LeagueTeamsView';
 import './Tabs.scss';
 
 interface TabsProps {
@@ -29,7 +29,7 @@ const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex, i
         isLoadingTeams ? (
           <div className="loader">Loading teams...</div>
         ) : (
-          <TeamsData teams={leagues[selectedIndex].teams} />
+          <LeagueTeamsView teams={leagues[selectedIndex].teams} />
         )
       )}
     </div>

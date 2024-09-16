@@ -1,12 +1,12 @@
 import React from 'react';
 import { Team } from '../../types';
-import './TeamsData.scss';
+import './LeagueTeamsView.scss';
 
-interface TeamsDataProps {
+interface LeagueTeamsViewProps {
   teams: Team[] | undefined;
 }
 
-const TeamsData: React.FC<TeamsDataProps> = ({ teams }) => {
+const LeagueTeamsView: React.FC<LeagueTeamsViewProps> = ({ teams }) => {
   if (!teams || teams.length === 0) {
     return <div className="teams-container">Loading teams...</div>;
   }
@@ -27,4 +27,4 @@ const TeamsData: React.FC<TeamsDataProps> = ({ teams }) => {
   );
 };
 
-export default TeamsData;
+export default LeagueTeamsView;
