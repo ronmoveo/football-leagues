@@ -5,8 +5,8 @@ import './Tabs.scss';
 
 interface TabsProps {
   leagues: League[];
-  selectedIndex: number | undefined;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  selectedIndex: number | undefined; // index of the current selected league or undefiend if none selected
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>; // func to update selected index
 }
 
 const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex }) => {
@@ -20,11 +20,11 @@ const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex })
             onClick={() => setSelectedIndex(index)}
           >
             {league.strLeague}
-          </button>
+          </button>  
         ))}
       </div>
       {selectedIndex !== undefined && leagues[selectedIndex] && (
-        <TeamsData teams={leagues[selectedIndex].teams} />
+        <TeamsData teams={leagues[selectedIndex].teams} /> //renders the teams of the selected leauge (if selected and exists)
       )}
     </div>
   );
