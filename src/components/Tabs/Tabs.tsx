@@ -5,11 +5,13 @@ import './Tabs.scss';
 
 interface TabsProps {
   leagues: League[];
-  selectedIndex: number | undefined; // index of the current selected league or undefiend if none selected
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>; // func to update selected index
+  selectedIndex: number | undefined;
+  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
+  isLoadingTeams: boolean;
 }
 
-const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex }) => {
+const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex, isLoadingTeams }) => {
+  
   return (
     <div>
       <div className="tab-list">
@@ -24,7 +26,11 @@ const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex })
         ))}
       </div>
       {selectedIndex !== undefined && leagues[selectedIndex] && (
-        <TeamsData teams={leagues[selectedIndex].teams} /> //renders the teams of the selected leauge (if selected and exists)
+        isLoadingTeams ? (
+          <div className="loader">Loading teams...</div>
+        ) : (
+          <TeamsData teams={leagues[selectedIndex].teams} />
+        )
       )}
     </div>
   );

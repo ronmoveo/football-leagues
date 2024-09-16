@@ -1,7 +1,7 @@
 export interface Team {
     idTeam: string;
     strTeam: string;
-    strBadge: string; //URL
+    strTeamBadge: string; //URL
   }
   
   export interface League {
@@ -9,3 +9,5 @@ export interface Team {
     strLeague: string;
     teams: Team[];
   }
+
+  

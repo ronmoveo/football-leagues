@@ -7,6 +7,11 @@ interface HeaderSearchBarProps {
 }
 
 const HeaderSearchBar: React.FC<HeaderSearchBarProps> = ({ searchTerm, setSearchTerm }) => {
+  // Function to clear the search term
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
   return (
     <div className="header-search-bar">
       <h1>Football Leagues</h1>
@@ -17,6 +22,7 @@ const HeaderSearchBar: React.FC<HeaderSearchBarProps> = ({ searchTerm, setSearch
         onChange={(e) => setSearchTerm(e.target.value)}
         className="search-input"
       />
+      <button onClick={clearSearch} className="clear-button">Clear</button>
     </div>
   );
 };
