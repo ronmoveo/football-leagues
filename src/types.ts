@@ -1,7 +1,7 @@
 export interface Team {
     idTeam: string;
     strTeam: string;
-    strTeamBadge: string; //URL
+    strBadge: string; //URL
   }
   
   export interface League {
@@ -10,4 +10,16 @@ export interface Team {
     teams: Team[];
   }
 
-  
+  export interface HeaderSearchBarProps {
+    searchTerm: string;
+    setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
+  }
+
+  export interface EmptyStateProps {
+    leaguesCount: number;
+    selectedIndex: number | undefined;
+  }
+
+  export interface LeagueTeamsViewProps {
+    teams: Team[] | undefined;
+  }

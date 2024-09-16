@@ -1,13 +1,9 @@
 import React from 'react';
 import './HeaderSearchBar.scss';
+import {HeaderSearchBarProps} from  '../../types';
 
-interface HeaderSearchBarProps {
-  searchTerm: string;
-  setSearchTerm: React.Dispatch<React.SetStateAction<string>>;
-}
 
 const HeaderSearchBar: React.FC<HeaderSearchBarProps> = ({ searchTerm, setSearchTerm }) => {
-  // Function to clear the search term
   const clearSearch = () => {
     setSearchTerm('');
   };

@@ -62,7 +62,7 @@ const FootballLeagues: React.FC = () => {
       const LeagueTeamsView: Team[] = response.data.teams.map((team: any) => ({
         idTeam: team.idTeam,
         strTeam: team.strTeam,
-        strTeamBadge: team.strTeamBadge,
+        strBadge: team.strBadge,
       }));
 
       setLeagues((prevLeagues) => {
@@ -86,7 +86,6 @@ const FootballLeagues: React.FC = () => {
       return <Loader />;
     }
 
-    // Show EmptyState if no leagues match the search
     if (filteredLeagues.length === 0) {
       return <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />;
     }
