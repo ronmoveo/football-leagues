@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useCallback, useState, useEffect } from 'react';
 import axios from 'axios';
 import { League, Team } from '../../types';
 import HeaderSearchBar from '../HeaderSearchBar/HeaderSearchBar';
@@ -16,17 +16,7 @@ const FootballLeagues: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
 
-  useEffect(() => {
-    fetchLeagues();
-  }, []);
-
-  useEffect(() => {
-    if (selectedIndex !== undefined && leagues[selectedIndex] && leagues[selectedIndex].teams === undefined) {
-      fetchTeams(leagues[selectedIndex].strLeague, selectedIndex);
-    }
-  }, [selectedIndex, leagues]);
-
-  const fetchLeagues = async (): Promise<void> => {
+  const fetchLeagues = useCallback(async (): Promise<void> => {
     setIsLoading(true);
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
@@ -51,7 +41,18 @@ const FootballLeagues: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+  
+  useEffect(() => {
+    fetchLeagues();
+  }, [fetchLeagues]);
+
+  useEffect(() => {
+    if (selectedIndex !== undefined && leagues[selectedIndex] && leagues[selectedIndex].teams === undefined) {
+      fetchTeams(leagues[selectedIndex].strLeague, selectedIndex);
+    }
+  }, [selectedIndex, leagues]);
+
 
   const fetchTeams = async (leagueName: string, leagueIndex: number) => {
     setIsLoadingTeams(true);
@@ -77,8 +78,11 @@ const FootballLeagues: React.FC = () => {
     }
   };
 
-  const filteredLeagues = leagues.filter((league) =>
-    league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredLeagues = useMemo(() => 
+    leagues.filter((league) =>
+      league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
+    ),
+    [leagues, searchTerm]
   );
 
   const renderContent = () => {
