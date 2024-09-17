@@ -6,7 +6,7 @@ import Tabs from '../Tabs/Tabs';
 import EmptyState from '../../common/EmptyState/EmptyState';
 import Loader from '../../common/Loader/Loader';
 import './FootballLeagues.scss';
-//
+
 const CACHE_KEY = 'footballLeaguesCache';
 
 const FootballLeagues: React.FC = () => {
@@ -14,10 +14,11 @@ const FootballLeagues: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingTeams, setIsLoadingTeams] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [teamSearchTerm, setTeamSearchTerm] = useState('');
+
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(undefined);
 
   const fetchLeagues = (async (): Promise<void> => {
-    console.log("enter callback")
     setIsLoading(true);
     const cachedData = localStorage.getItem(CACHE_KEY);
     if (cachedData) {
@@ -46,7 +47,6 @@ const FootballLeagues: React.FC = () => {
   
   useEffect(() => {
     fetchLeagues();
-    console.log("enter use effect")
   }, []);
 
   useEffect(() => {
@@ -81,11 +81,16 @@ const FootballLeagues: React.FC = () => {
   };
 
  const filteredLeagues = useMemo(() => 
-    leagues.filter((league) =>
-      league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())
-    ),
+    leagues.filter((league) => league.strLeague.toLowerCase().includes(searchTerm.toLowerCase())),
     [leagues, searchTerm]
   );
+
+  const filteredTeams = useMemo(() => {
+    if (selectedIndex === undefined || !leagues[selectedIndex]?.teams) return [];
+    return leagues[selectedIndex].teams!.filter((team) =>
+      team.strTeam.toLowerCase().includes(teamSearchTerm.toLowerCase())
+    );
+  }, [leagues, selectedIndex, teamSearchTerm]);
 
   const renderContent = () => {
 
@@ -96,6 +101,9 @@ const FootballLeagues: React.FC = () => {
           selectedIndex={selectedIndex}
           setSelectedIndex={setSelectedIndex}
           isLoadingTeams={isLoadingTeams}
+          teams={filteredTeams}
+          teamSearchTerm={teamSearchTerm}
+          setTeamSearchTerm={setTeamSearchTerm}
         />
         {selectedIndex === undefined && (
           <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />
@@ -106,8 +114,8 @@ const FootballLeagues: React.FC = () => {
 
   return (
     <div className="football-leagues">
-      {filteredLeagues.length === 0 ?? <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />}
-      {isLoading ?? <Loader />}
+      {filteredLeagues.length === 0 && <EmptyState leaguesCount={filteredLeagues.length} selectedIndex={selectedIndex} />}
+      {isLoading && <Loader />}
       <HeaderSearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       {renderContent()}
     </div>

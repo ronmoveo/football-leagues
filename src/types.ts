@@ -23,3 +23,13 @@ export interface Team {
   export interface LeagueTeamsViewProps {
     teams: Team[] | undefined;
   }
+
+  export interface TabsProps {
+    leagues: League[];
+    selectedIndex: number | undefined;
+    setSelectedIndex: (index: number) => void;
+    isLoadingTeams: boolean;
+    teams: Team[];
+    teamSearchTerm: string;
+    setTeamSearchTerm: (term: string) => void;
+  }

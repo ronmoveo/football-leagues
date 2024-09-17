@@ -1,36 +1,54 @@
 import React from 'react';
-import { League } from '../../types';
+import { TabsProps } from '../../types';
 import LeagueTeamsView from '../LeagueTeamsView/LeagueTeamsView';
+import TeamSearchBar from './TeamSearchBar/TeamSearchBar';
 import './Tabs.scss';
 
-interface TabsProps {
-  leagues: League[];
-  selectedIndex: number | undefined;
-  setSelectedIndex: React.Dispatch<React.SetStateAction<number | undefined>>;
-  isLoadingTeams: boolean;
-}
+const Tabs: React.FC<TabsProps> = ({
+  leagues,
+  selectedIndex,
+  setSelectedIndex,
+  isLoadingTeams,
+  teams,
+  teamSearchTerm,
+  setTeamSearchTerm,
+  }) => {
+  const handleTabClick = (index: number) => {
+    setSelectedIndex(index);
+    setTeamSearchTerm(''); 
+  };
 
-const Tabs: React.FC<TabsProps> = ({ leagues, selectedIndex, setSelectedIndex, isLoadingTeams }) => {
-  
+  const handleClearTeamSearch = () => {
+    setTeamSearchTerm('');
+    
+  };
+
   return (
-    <div>
+    <div className="tabs">
       <div className="tab-list">
         {leagues.map((league, index) => (
           <button
             key={league.idLeague}
             className={`tab ${selectedIndex === index ? 'tab--selected' : ''}`}
-            onClick={() => setSelectedIndex(index)}
+            onClick={() => handleTabClick(index)}
           >
             {league.strLeague}
-          </button>  
+          </button>
         ))}
       </div>
-      {selectedIndex !== undefined && leagues[selectedIndex] && (
-        isLoadingTeams ? (
-          <div className="loader">Loading teams...</div>
-        ) : (
-          <LeagueTeamsView teams={leagues[selectedIndex].teams} />
-        )
+      {selectedIndex !== undefined && (
+        <div className="tab-content">
+          <TeamSearchBar
+            teamSearchTerm={teamSearchTerm}
+            setTeamSearchTerm={setTeamSearchTerm}
+            onClear={handleClearTeamSearch}
+          />
+          {isLoadingTeams ? (
+            <div>Loading teams...</div>
+          ) : (
+            <LeagueTeamsView teams={teams} />
+          )}
+        </div>
       )}
     </div>
   );

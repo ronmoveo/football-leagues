@@ -3,8 +3,6 @@ import './LeagueTeamsView.scss';
 import {LeagueTeamsViewProps} from '../../types';
 
 const LeagueTeamsView: React.FC<LeagueTeamsViewProps> = ({ teams }) => {
-  console.log("🚀 ~ teams:", teams)
-  console.log("ron");
   
   if (!teams || teams.length === 0) {
     return <div className="teams-container">Loading teams...</div>;
