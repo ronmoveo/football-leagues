@@ -1,0 +1,20 @@
+.tab-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 0;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+   
+  
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid transparent;
+  
+      &--selected {
+        background-color: #8a8fa1;
+        border-color: #0a01019f;
+      }
+    }
+  }
+  

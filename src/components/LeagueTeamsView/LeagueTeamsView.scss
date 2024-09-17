@@ -1,0 +1,40 @@
+.teams-container {
+    width: 100%; //width of page
+    padding: 20px; //from all sides
+  }
+  
+  .teams-flex {
+    display: flex;
+    flex-wrap: wrap; //boxes will go to the next row if no more room instead of scrolling to the side all together
+    gap: 20px; //between teams boxes from all sides
+  }
+  
+  .team-card {
+    flex: 0 0 200px; //wont shrink or grow from intial size, meaning all boxes will be the same size. 200 - px width
+    display: flex;
+    flex-direction: column;
+    align-items: center; //center logo inside the box
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: transform 0.2s; //time for completion of tranform transition
+  
+    &:hover {
+      transform: scale(1.05); //hover increase size
+    }
+  
+    img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain; //make the logo fit in the box
+      margin-bottom: 10px;
+      background-color: #f0f0f0;
+    }
+  
+    h3 {
+      text-align: center;
+      font-size: 1rem;
+    }
+  }
+  
+  
